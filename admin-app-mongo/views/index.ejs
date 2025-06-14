@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Pembelian</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    form { margin-top: 20px; }
+    input, select, button { padding: 6px; margin-right: 10px; }
+  </style>
+</head>
+<body>
+
+  <h1>Admin Pembelian (MongoDB)</h1>
+
+  <!-- Form Pembelian -->
+  <form method="POST" action="/beli">
+    <label for="id_produk">Pilih Produk:</label>
+    <select name="id_produk" id="id_produk" required>
+      <% produk.forEach(p => { %>
+        <option value="<%= p._id %>"><%= p.nama %> - Rp<%= p.harga %></option>
+      <% }) %>
+    </select>
+
+    <input type="number" name="jumlah" min="1" placeholder="Jumlah" required />
+    <button type="submit">Beli</button>
+  </form>
+
+  <!-- Tabel Riwayat Pembelian -->
+  <h2>Riwayat Pembelian</h2>
+  <h3>Total Penjualan: 
+    <span style="color: green;">
+      Rp<%= totalPenjualan.toLocaleString() %>
+    </span>
+  </h3>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Produk</th>
+        <th>Jumlah</th>
+        <th>Harga Satuan</th>
+        <th>Total Harga</th>
+        <th>Status</th>
+        <th>Tanggal</th>
+        <th>Aksi</th>
+        <th>Hapus</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% pembelian.forEach(p => { %>
+        <tr>
+          <td><%= p._id %></td>
+
+          <td>
+            <% if (p.id_produk && p.id_produk.nama) { %>
+              <%= p.id_produk.nama %>
+            <% } else { %>
+              <em>Produk tidak ditemukan</em>
+            <% } %>
+          </td>
+
+          <td><%= p.jumlah %></td>
+
+          <td>
+            <% if (p.id_produk && p.id_produk.harga) { %>
+              Rp<%= p.id_produk.harga.toLocaleString() %>
+            <% } else { %>
+              -
+            <% } %>
+          </td>
+
+          <td>
+            <% if (p.id_produk && p.id_produk.harga) { %>
+              Rp<%= (p.jumlah * p.id_produk.harga).toLocaleString() %>
+            <% } else { %>
+              -
+            <% } %>
+          </td>
+
+          <td><%= p.status %></td>
+          <td><%= new Date(p.tanggal).toLocaleString() %></td>
+          <td>
+            <% if (p.status === 'dibeli') { %>
+              <form method="POST" action="/cancel/<%= p._id %>">
+                <button type="submit">Cancel</button>
+              </form>
+            <% } else { %>
+              <em>-</em>
+            <% } %>
+          </td>
+          <td style="white-space: nowrap;">          
+            <!-- Tombol Delete selalu tampil -->
+            <form method="POST" action="/delete/<%= p._id %>" style="display: inline;" onsubmit="return confirm('Yakin ingin hapus pembelian ini?');">
+              <button type="submit">🗑 Delete</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+</body>
+</html>
