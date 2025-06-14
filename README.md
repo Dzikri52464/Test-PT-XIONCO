@@ -61,8 +61,10 @@ Tombol delete akan menghapus data permanen dari database.
 
 Seed hanya dijalankan sekali saja, atau untuk menambahkan barang jika tidak akan duplicate.
 
+-------------------------------------------------------------------------------------------------------------------------------
+
 2 Chat bot Ai
-README.md untuk Proyek Chatbot Gemini
+README.md
 Chatbot Gemini (Node.js + Express + EJS)
 
 Proyek chatbot sederhana yang terhubung ke **Gemini API** dari Google AI Studio. Dibangun menggunakan **Node.js**, **Express.js**, dan **EJS** sebagai templating engine.
